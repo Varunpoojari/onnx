@@ -80,7 +80,7 @@ jobs:
 
       - name: Generate seed corpora
         run: |
-          mkdir -p corpus crashes/{checker,model_loader,parser,shape_inference,version_converter,compose,external_data,inliner}
+          mkdir -p corpus crashes/{checker,model_loader,parser,shape_inference,version_converter,compose,external_data,inliner,reference_evaluator}
           python onnx/fuzz/make_seed_corpus.py \
             corpus/version_converter.zip corpus/parser.zip \
             corpus/checker.zip corpus/shape_inference.zip corpus/compose.zip \
@@ -96,6 +96,9 @@ jobs:
           # fuzz_inliner.py builds its own structured models, so it starts
           # from an empty corpus.
           mkdir -p corpus/inliner
+          # fuzz_reference_evaluator.py builds its own structured models, so it
+          # starts from an empty corpus.
+          mkdir -p corpus/reference_evaluator
 
       - name: Set fuzz duration
         id: duration
@@ -143,6 +146,11 @@ jobs:
 
       - name: Run fuzz_inliner.py
         run: python onnx/fuzz/fuzz_inliner.py -max_total_time="$FUZZ_SECONDS" -timeout=20 -artifact_prefix=crashes/inliner/ corpus/inliner
+        env:
+          FUZZ_SECONDS: ${{ steps.duration.outputs.seconds }}
+
+      - name: Run fuzz_reference_evaluator.py
+        run: python onnx/fuzz/fuzz_reference_evaluator.py -max_total_time="$FUZZ_SECONDS" -timeout=20 -artifact_prefix=crashes/reference_evaluator/ corpus/reference_evaluator
         env:
           FUZZ_SECONDS: ${{ steps.duration.outputs.seconds }}
 

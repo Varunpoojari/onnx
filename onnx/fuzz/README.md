@@ -17,6 +17,7 @@ for crashes, hangs, and sanitizer violations.
 | `fuzz_inliner.py` | `inliner.inline_local_functions`, `inline_selected_functions` (incl. schema functions) | Raw bytes **and** structured model with local functions (toggle byte) |
 | `fuzz_model_loader.py` | `load_model_from_string` + `checker.check_model` | Raw bytes → protobuf parser |
 | `fuzz_parser.py` | `parser.parse_model`, `parse_graph`, `parse_function`, `parse_node` | UTF-8 text (ONNX text format) |
+| `fuzz_reference_evaluator.py` | `reference.ReferenceEvaluator` (single-operator models for the default and `ai.onnx.ml` domains) | Raw bytes **and** structured model (toggle byte) |
 | `fuzz_shape_inference.py` | `shape_inference.infer_shapes` | Raw bytes **and** structured model (toggle byte) |
 | `fuzz_version_converter.py` | `version_converter.convert_version` | Raw bytes → protobuf parser |
 | `make_seed_corpus.py` | *(seed generator, not a fuzzer)* | Produces seed zips for OSS-Fuzz |
@@ -55,6 +56,7 @@ python onnx/fuzz/fuzz_checker.py -runs=1000
 python onnx/fuzz/fuzz_compose.py -runs=1000
 python onnx/fuzz/fuzz_external_data.py -runs=1000
 python onnx/fuzz/fuzz_inliner.py -runs=1000
+python onnx/fuzz/fuzz_reference_evaluator.py -runs=1000
 python onnx/fuzz/fuzz_parser.py -runs=1000
 python onnx/fuzz/fuzz_shape_inference.py -runs=1000
 python onnx/fuzz/fuzz_version_converter.py -runs=1000
